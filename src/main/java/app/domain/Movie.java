@@ -8,12 +8,6 @@ public class Movie {
     private int year;
     private List<Actor> actors;
 
-    public Movie(String title, int year, List<Actor> actors) {
-        this.title = title;
-        this.year = year;
-        this.actors = actors;
-    }
-
     public String getTitle() {
         return title;
     }
