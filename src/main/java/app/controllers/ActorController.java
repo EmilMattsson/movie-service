@@ -29,8 +29,7 @@ public class ActorController {
     }
 
     public void getOne(@NotNull Context context) throws SQLException {
-        String actorId = context.pathParam("id");
-        actorDao.getOne(actorId);
-        context.status(201).json();
+        String actorId = context.pathParam("id");;
+        context.status(201).json(actorDao.getOne(actorId));
     }
 }

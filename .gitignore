@@ -23,7 +23,6 @@
 hs_err_pid*
 
 # Maven
-.idea
 .classpath
 .project
 

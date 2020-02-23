@@ -33,7 +33,8 @@ public final class ActorDao {
 
         try (var stmt = dbConnection.createStatement()) {
             var sql = String.format("SELECT * FROM ACTOR WHERE ID = '%s';", actorId);
-            ActorEntity actor = stmt.executeQuery(sql);
+            ActorEntity actor = new ActorEntity();
+            stmt.executeQuery(sql);
             return actor;
         }
     }
