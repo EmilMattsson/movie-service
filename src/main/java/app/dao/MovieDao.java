@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import app.domain.Movie;
+import org.jetbrains.annotations.NotNull;
 
-public final class MovieDao {
+public class MovieDao {
 
     private Connection dbConnection;
 
-    public MovieDao(Connection connection) {
+    public MovieDao(@NotNull Connection connection) {
         this.dbConnection = connection;
     }
 

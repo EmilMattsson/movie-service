@@ -5,12 +5,13 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import app.domain.Actor;
+import org.jetbrains.annotations.NotNull;
 
-public final class ActorDao {
+public class ActorDao {
 
     private final Connection dbConnection;
 
-    public ActorDao(Connection c) {
+    public ActorDao(@NotNull Connection c) {
         dbConnection = c;
     }
 

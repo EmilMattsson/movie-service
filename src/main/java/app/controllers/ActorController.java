@@ -13,7 +13,7 @@ public class ActorController {
 
     private ActorDao actorDao;
 
-    public ActorController(Connection dbConnection) {
+    public ActorController(@NotNull Connection dbConnection) {
         actorDao = new ActorDao(dbConnection);
     }
 

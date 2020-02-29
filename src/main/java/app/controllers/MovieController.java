@@ -13,7 +13,7 @@ public class MovieController {
 
     private final MovieDao movieDao;
 
-    public MovieController(Connection dbConnection) {
+    public MovieController(@NotNull Connection dbConnection) {
         this.movieDao = new MovieDao(dbConnection);
     }
 
