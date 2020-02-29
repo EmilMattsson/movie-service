@@ -6,7 +6,7 @@ public class Movie {
 
     private String title;
     private int year;
-    private List<Actor> actors;
+    private List<String> actors;
 
     public String getTitle() {
         return title;
@@ -24,11 +24,11 @@ public class Movie {
         this.year = year;
     }
 
-    public List<Actor> getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
-    public void setActors(List<Actor> actors) {
+    public void setActors(List<String> actors) {
         this.actors = actors;
     }
 }

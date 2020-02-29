@@ -1,14 +1,14 @@
 package app.dao;
 
-import app.domain.Actor;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import app.domain.Actor;
+
 public final class ActorDao {
 
-    private Connection dbConnection;
+    private final Connection dbConnection;
 
     public ActorDao(Connection c) {
         dbConnection = c;
