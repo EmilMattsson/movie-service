@@ -26,11 +26,14 @@ public class MovieController {
         }
     }
 
-    public static void getOne(@NotNull Context context) {
-        context.result("get one");
+    public void getOne(@NotNull Context context) throws SQLException {
+        var movieId = context.pathParam("id");
+        context.status(200).json(movieDao.getMovie(movieId));
     }
 
-    public static void delete(@NotNull Context context) {
-        context.result("delete");
+    public void delete(@NotNull Context context) throws SQLException {
+        var movieId = context.pathParam("id");
+        movieDao.deleteMovie(movieId);
+        context.status(204).result("");
     }
 }

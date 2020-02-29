@@ -1,7 +1,10 @@
 package app.dao;
 
+import static java.lang.Integer.parseInt;
+
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import app.domain.Movie;
@@ -19,8 +22,7 @@ public final class MovieDao {
         try (var stmt = dbConnection.createStatement()) {
             var actorIds = movie.getActors();
             if (!actorIds.isEmpty()) {
-                var doesActorsExist = String.format("SELECT COUNT(*) FROM ACTOR WHERE ID IN(%s);",
-                        actorIds.toString()
+                var doesActorsExist = String.format("SELECT COUNT(*) FROM ACTOR WHERE ID IN(%s);", actorIds.toString()
                                 .replace('[', '\'')
                                 .replace(']', '\'')
                                 .replace(", ", "', '"));
@@ -43,5 +45,40 @@ public final class MovieDao {
             });
         }
         return id;
+    }
+
+    public MovieEntity getMovie(String id) throws SQLException {
+        MovieEntity movie = new MovieEntity();
+        var getMovie = String.format("SELECT * FROM MOVIE WHERE ID = '%s';", id);
+        var getActorsInMovie = String.format("SELECT ACTOR_ID FROM ACTOR_IN_MOVIE WHERE MOVIE_ID = '%s';", id);
+        try (var stmt = dbConnection.createStatement()){
+
+            var movieQueryResult = stmt.executeQuery(getMovie);
+            if (movieQueryResult.next()) {
+                movie.setId(movieQueryResult.getString("id"));
+                movie.setTitle(movieQueryResult.getString("title"));
+                movie.setYear(parseInt(movieQueryResult.getString("year")));
+            }
+            movieQueryResult.close();
+
+            var actorInMovieQueryResult = stmt.executeQuery(getActorsInMovie);
+            var actorIds = new ArrayList<String>();
+            while (actorInMovieQueryResult.next()) {
+                actorIds.add(actorInMovieQueryResult.getString("actor_id"));
+            }
+            movie.setActors(actorIds);
+            actorInMovieQueryResult.close();
+
+            return movie;
+        }
+    }
+
+    public void deleteMovie(String id) throws SQLException {
+        var deleteMovieQuery = String.format("DELETE FROM MOVIE WHERE ID = '%s'", id);
+        var deleteActorInMovieQuery = String.format("DELETE FROM ACTOR_IN_MOVIE WHERE MOVIE_ID = '%s'", id);
+        try (var stmt = dbConnection.createStatement()) {
+            stmt.executeUpdate(deleteMovieQuery);
+            stmt.executeUpdate(deleteActorInMovieQuery);
+        }
     }
 }

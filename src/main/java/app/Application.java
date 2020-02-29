@@ -18,11 +18,12 @@ import org.slf4j.LoggerFactory;
 public class Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
-    private static ActorController actorController;
-    private static MovieController movieController;
+    private static Connection dbConnection = null;
 
     public static void main(String[] args) {
         connectToDB();
+        var actorController = new ActorController(dbConnection);
+        var movieController = new MovieController(dbConnection);
 
         Javalin app = Javalin.create();
         app.routes(() -> {
@@ -36,8 +37,8 @@ public class Application {
             path("/api/movies", () -> {
                 post(movieController::create);
                 path(":id", () -> {
-                    get(MovieController::getOne);
-                    delete(MovieController::delete);
+                    get(movieController::getOne);
+                    delete(movieController::delete);
                 });
             });
         }).start(4000);
@@ -45,14 +46,11 @@ public class Application {
 
     private static void connectToDB() {
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection dbConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/MovieServiceDB",
+            dbConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/MovieServiceDB",
                     "movieservice", "try_to.guessMYPWD1337");
-            actorController = new ActorController(dbConnection);
-            movieController = new MovieController(dbConnection);
             LOGGER.info("connected to DB");
-        } catch (SQLException | ClassNotFoundException exception) {
-            LOGGER.error(exception.getMessage());
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 }
