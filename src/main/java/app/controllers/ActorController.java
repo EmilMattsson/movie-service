@@ -18,7 +18,9 @@ public class ActorController {
     }
 
     public void create(@NotNull Context context) throws SQLException {
+
         Actor newActor = JavalinJson.fromJson(context.body(), Actor.class);
+
         if (newActor.getName() == null) {
             context.status(400).result("Actor name is null");
         } else {
@@ -27,13 +29,17 @@ public class ActorController {
     }
 
     public void delete(@NotNull Context context) throws SQLException {
+
         String actorId = context.pathParam("id");
         actorDao.deleteActor(actorId);
+
         context.status(204).result("");
     }
 
     public void getOne(@NotNull Context context) throws SQLException {
-        String actorId = context.pathParam("id");;
+
+        String actorId = context.pathParam("id");
+
         context.status(200).json(actorDao.getOne(actorId));
     }
 }

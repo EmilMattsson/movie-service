@@ -19,8 +19,10 @@ public class MovieDao {
     }
 
     public UUID insertMovie(Movie movie) throws SQLException {
+
         UUID id;
         try (var stmt = dbConnection.createStatement()) {
+
             var actorIds = movie.getActors();
             if (!actorIds.isEmpty()) {
                 var doesActorsExist = String.format("SELECT COUNT(*) FROM ACTOR WHERE ID IN(%s);", actorIds.toString()
@@ -49,9 +51,11 @@ public class MovieDao {
     }
 
     public MovieEntity getMovie(String id) throws SQLException {
+
         MovieEntity movie = new MovieEntity();
         var getMovie = String.format("SELECT * FROM MOVIE WHERE ID = '%s';", id);
         var getActorsInMovie = String.format("SELECT ACTOR_ID FROM ACTOR_IN_MOVIE WHERE MOVIE_ID = '%s';", id);
+
         try (var stmt = dbConnection.createStatement()){
 
             var movieQueryResult = stmt.executeQuery(getMovie);
@@ -75,8 +79,10 @@ public class MovieDao {
     }
 
     public void deleteMovie(String id) throws SQLException {
+
         var deleteMovieQuery = String.format("DELETE FROM MOVIE WHERE ID = '%s'", id);
         var deleteActorInMovieQuery = String.format("DELETE FROM ACTOR_IN_MOVIE WHERE MOVIE_ID = '%s'", id);
+
         try (var stmt = dbConnection.createStatement()) {
             stmt.executeUpdate(deleteMovieQuery);
             stmt.executeUpdate(deleteActorInMovieQuery);
