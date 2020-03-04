@@ -1,9 +1,0 @@
-postgres:
-   image: postgres:12.1-alpine
-   ports:
-     - 5432:5432
-#   restart: always
-   environment:
-     POSTGRES_USER: "movieservice"
-     POSTGRES_PASSWORD: "try_to.guessMYPWD1337"
-     POSTGRES_DB: "MovieServiceDB"
