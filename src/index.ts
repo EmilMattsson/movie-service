@@ -1,9 +1,21 @@
-import fastify, { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import fastify, {
+  FastifyInstance,
+  FastifyRequest,
+  FastifyReply,
+  RouteShorthandOptions,
+} from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
+
+import { createActor, getActor, deleteActor } from './routes/actorHandlers'
+import {
+  createActorOptions,
+  getActorOptions,
+  deleteActorOptions,
+} from './routes/actorRouteOptions'
 
 const server: FastifyInstance = fastify({ logger: true })
 
-const opts: fastify.RouteShorthandOptions = {
+const opts: RouteShorthandOptions = {
   schema: {
     response: {
       200: {
@@ -25,6 +37,10 @@ server.get(
     return { pong: 'it worked!' }
   }
 )
+
+server.post('/actors', createActorOptions, createActor)
+server.get('/actors/:id', getActorOptions, getActor)
+server.delete('/actors/:id', deleteActorOptions, deleteActor)
 
 server.listen(3000, err => {
   if (err) {
