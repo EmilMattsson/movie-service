@@ -33,5 +33,5 @@ export const deleteActor = async (
 ) => {
   const actorId = request.params.id
   actors.filter((actor: Actor) => actor.id != actorId)
-  reply.status(200).send(actors)
+  reply.status(204).send(actors)
 }
