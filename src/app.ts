@@ -2,7 +2,7 @@ import fastify, {
   FastifyInstance
 } from 'fastify'
 
-import { createActor, getActor, deleteActor } from './routes/actorHandlers'
+import { createActor, getActor, deleteActor, getActors } from './routes/actorHandlers'
 import {
   createActorOptions,
   getActorOptions,
@@ -13,6 +13,7 @@ import { MovieController } from './routes/movieController'
 const server: FastifyInstance = fastify({ logger: true })
 const movieController = new MovieController()
 
+server.get('/actors', getActors)
 server.post('/actors', createActorOptions, createActor)
 server.get('/actors/:id', getActorOptions, getActor)
 server.delete('/actors/:id', deleteActorOptions, deleteActor)

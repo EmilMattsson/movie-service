@@ -8,30 +8,34 @@ let actors: Actor[] = []
 
 export const createActor = async (
   request: FastifyRequest,
-  reply: FastifyReply<ServerResponse>
+  response: FastifyReply<ServerResponse>
 ) => {
   const newActor: Actor = {
     id: counter++,
     name: request.body.name,
   }
   actors.push(newActor)
-  reply.status(201).send(newActor)
+  response.status(201).send(newActor)
 }
 
 export const getActor = async (
   request: FastifyRequest,
-  reply: FastifyReply<ServerResponse>
+  response: FastifyReply<ServerResponse>
 ) => {
   const actorId = request.params.id
   const actor = actors.find((a: Actor) => a.id == actorId)
-  reply.status(200).send(actor)
+  response.status(200).send(actor)
+}
+
+export const getActors = async (request: FastifyRequest, response: FastifyReply<ServerResponse>) => {
+  response.status(200).send(actors)
 }
 
 export const deleteActor = async (
   request: FastifyRequest,
-  reply: FastifyReply<ServerResponse>
+  response: FastifyReply<ServerResponse>
 ) => {
   const actorId = request.params.id
   actors.filter((actor: Actor) => actor.id != actorId)
-  reply.status(204).send(actors)
+  response.status(204).send(actors)
 }
