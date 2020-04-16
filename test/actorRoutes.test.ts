@@ -38,6 +38,6 @@ describe('testing actor routes', () => {
         url: '/actors',
       }
     )
-    expect(actors.payload).toBe(JSON.stringify([]))
+    expect(actors.payload).toBe(JSON.stringify([JSON.parse(result.payload)]))
   })
 })
