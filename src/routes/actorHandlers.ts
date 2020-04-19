@@ -10,12 +10,17 @@ export const createActor = async (
   request: FastifyRequest,
   response: FastifyReply<ServerResponse>
 ) => {
-  const newActor: Actor = {
-    id: counter++,
-    name: request.body.name,
+  if (!request.body?.name) {
+    response.status(400).send('"name" is required')
+  } else {
+    const newActor: Actor = {
+      id: counter++,
+      name: request.body.name,
+    }
+    actors.push(newActor)
+
+    response.status(201).send(newActor)
   }
-  actors.push(newActor)
-  response.status(201).send(newActor)
 }
 
 export const getActor = async (

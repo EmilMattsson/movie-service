@@ -12,7 +12,7 @@ describe('testing actor routes', () => {
   })
   
   test('create an Actor named "Brad Pitt", then delete him', async () => {
-    const result = await createActor()
+    const result = await createActor('Brad Pitt')
     expect(result.statusCode).toBe(201)
     expect(isString(result.payload)).toBe(true)
     expect(isObject(JSON.parse(result.payload))).toBe(true)
@@ -24,5 +24,11 @@ describe('testing actor routes', () => {
 
     const actors = await getActors()
     expect(actors.payload).toBe(JSON.stringify([]))
+  })
+
+  test('try to create and actor without specifying a name should return a 400 response', async () => {
+    const result = await createActor()
+    expect(result.statusCode).toBe(400)
+    expect(result.payload).toBe('"name" is required')
   })
 })

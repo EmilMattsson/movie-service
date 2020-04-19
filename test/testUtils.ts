@@ -1,12 +1,12 @@
 import server from '../src/app'
 
-export async function createActor() {
+export async function createActor(name?: string) {
   return server.inject(
     {
       method: 'POST',
       url: '/actors',
       payload: {
-        name: 'Brad Pitt'
+        name: name
       }
     }
   )
