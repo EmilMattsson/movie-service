@@ -1,4 +1,3 @@
-import server from '../src/app'
 import { isObject, isString } from 'util'
 
 import { createActor, getActors, deleteActor } from './testUtils'

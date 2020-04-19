@@ -1,4 +1,4 @@
-import server from '../src/app'
+import server from '../src/serverConfig'
 
 export async function createActor(name?: string) {
   return server.inject(
