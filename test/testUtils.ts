@@ -11,3 +11,21 @@ export async function createActor() {
     }
   )
 }
+
+export async function getActors() {
+  return server.inject(
+    {
+      method: 'GET',
+      url: '/actors',
+    }
+  )
+}
+
+export async function deleteActor() {
+  return server.inject(
+    {
+      method: 'DELETE',
+      url: '/actors/0'
+    }
+  )
+}

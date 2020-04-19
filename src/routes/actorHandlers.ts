@@ -36,6 +36,6 @@ export const deleteActor = async (
   response: FastifyReply<ServerResponse>
 ) => {
   const actorId = request.params.id
-  actors.filter((actor: Actor) => actor.id != actorId)
+  actors = actors.filter((actor: Actor) => actor.id != actorId)
   response.status(204).send(actors)
 }
