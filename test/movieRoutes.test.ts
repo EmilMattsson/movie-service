@@ -1,6 +1,8 @@
-import { getMovie, createMovie, deleteMovie } from './testUtils'
+import { getMovie, createMovie, deleteMovie, createActor } from './testUtils'
+import { Actor, Movie } from '../src/models'
 
-describe('some random test', () => {
+describe('testing movie routes', () => {
+
 	test('get a movie that does not exist, then 404 should be returned', async () => {
 		const res = await getMovie(0)
 
@@ -32,11 +34,34 @@ describe('some random test', () => {
 		expect(res.statusCode).toBe(400)
 	})
 
-	// test create a movie with valid title, year, and actors
-
 	test('delete a movie that does not exist, then 404 should be returned', async () => {
 		const res = await deleteMovie(0)
 
 		expect(res.statusCode).toBe(404)
+	})
+
+	test('create a movie with valid data should return 200', async () => {
+		const bale: Actor = JSON.parse((await createActor('Christian Bale')).payload)
+		const pitt: Actor = JSON.parse((await createActor('Brad Pitt')).payload)
+
+		const res = await createMovie('Wolf on Wallstreet', 2011, [bale.id, pitt.id])
+
+		const createdMovie: Movie = JSON.parse(res.payload)
+		expect(res.statusCode).toBe(200)
+		expect(createdMovie.title).toBe('Wolf on Wallstreet')
+		expect(createdMovie.year).toBe(2011)
+		expect(createdMovie.actors.length).toBe(2)
+	})
+
+	test('create a movie and then delete it should return 204 when deleting it', async () => {
+		const leo: Actor = JSON.parse((await createActor('Leonardo Di Caprio')).payload)
+		const movie: Movie = JSON.parse(((await createMovie('Wolf on Wallstreet', 2011, [leo.id])).payload))
+
+		const res = await deleteMovie(movie.id)
+		expect(res.statusCode).toBe(204)
+
+		// try to get the deleted movie after deleting it
+		const res2 = await getMovie(movie.id)
+		expect(res2.statusCode).toBe(404)
 	})
 })
