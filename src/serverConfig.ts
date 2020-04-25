@@ -1,12 +1,10 @@
-import fastify, {
-  FastifyInstance
-} from 'fastify'
+import fastify, { FastifyInstance } from 'fastify'
 
 import { createActor, getActor, deleteActor, getActors } from './routes/actorHandlers'
 import {
-  createActorOptions,
-  getActorOptions,
-  deleteActorOptions,
+	createActorOptions,
+	getActorOptions,
+	deleteActorOptions
 } from './routes/actorRouteOptions'
 import { MovieController } from './routes/movieController'
 

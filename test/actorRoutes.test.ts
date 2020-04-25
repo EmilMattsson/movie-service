@@ -3,42 +3,46 @@ import { isObject, isString } from 'util'
 import { createActor, getActors, deleteActor, getActor } from './testUtils'
 
 describe('testing actor routes', () => {
+	test('get an actor that does not exist, then 404 error should be returned', async () => {
+		const res = await getActor(1)
 
-  test('get an actor that does not exist, then 404 error should be returned', async () => {
-    const res = await getActor(1)
-    expect(res.statusCode).toBe(404)
-    expect(res.payload).toBe('Actor not found')
-  })
+		expect(res.statusCode).toBe(404)
+		expect(res.payload).toBe('Actor not found')
+	})
 
-  test('delete an actor that does not exist, then 404 error should be returned', async () => {
-    const res = await deleteActor(0)
-    expect(res.statusCode).toBe(404)
-    expect(res.payload).toBe('Actor not found')
-  })
-  
-  test('get all actors when none have been created, then an empty array is returned', async () => {
-    const res = await getActors()
-    expect(res.statusCode).toBe(200)
-    expect(res.payload).toBe('[]')
-  })
-  
-  test('create an Actor named "Brad Pitt", then delete him', async () => {
-    const result = await createActor('Brad Pitt')
-    expect(result.statusCode).toBe(201)
-    expect(isString(result.payload)).toBe(true)
-    expect(isObject(JSON.parse(result.payload))).toBe(true)
-    expect(JSON.parse(result.payload).name).toBe('Brad Pitt')
+	test('delete an actor that does not exist, then 404 error should be returned', async () => {
+		const res = await deleteActor(0)
 
-    const res = await deleteActor(JSON.parse(result.payload).id)
-    expect(res.statusCode).toBe(204)
+		expect(res.statusCode).toBe(404)
+		expect(res.payload).toBe('Actor not found')
+	})
 
-    const actors = await getActors()
-    expect(actors.payload).toBe('[]')
-  })
+	test('get all actors when none have been created, then an empty array is returned', async () => {
+		const res = await getActors()
 
-  test('try to create and actor without specifying a name should return a 400 response', async () => {
-    const result = await createActor()
-    expect(result.statusCode).toBe(400)
-    expect(result.payload).toBe('"name" is required')
-  })
+		expect(res.statusCode).toBe(200)
+		expect(res.payload).toBe('[]')
+	})
+
+	test('create an Actor named "Brad Pitt", then delete him', async () => {
+		const result = await createActor('Brad Pitt')
+
+		expect(result.statusCode).toBe(201)
+		expect(isString(result.payload)).toBe(true)
+		expect(isObject(JSON.parse(result.payload))).toBe(true)
+		expect(JSON.parse(result.payload).name).toBe('Brad Pitt')
+
+		const res = await deleteActor(JSON.parse(result.payload).id)
+		expect(res.statusCode).toBe(204)
+
+		const actors = await getActors()
+		expect(actors.payload).toBe('[]')
+	})
+
+	test('try to create and actor without specifying a name should return a 400 response', async () => {
+		const result = await createActor()
+		
+		expect(result.statusCode).toBe(400)
+		expect(result.payload).toBe('"name" is required')
+	})
 })
