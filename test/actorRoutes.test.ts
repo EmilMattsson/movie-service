@@ -1,8 +1,14 @@
 import { isObject, isString } from 'util'
 
-import { createActor, getActors, deleteActor } from './testUtils'
+import { createActor, getActors, deleteActor, getActor } from './testUtils'
 
 describe('testing actor routes', () => {
+
+  test('get an actor that does not exist, then 404 error should be returned', async () => {
+    const res = await getActor(1)
+    expect(res.statusCode).toBe(404)
+    expect(res.payload).toBe('Actor not found')
+  })
   
   test('get all actors when none have been created, then an empty array is returned', async () => {
     const res = await getActors()
@@ -16,7 +22,6 @@ describe('testing actor routes', () => {
     expect(isString(result.payload)).toBe(true)
     expect(isObject(JSON.parse(result.payload))).toBe(true)
     expect(JSON.parse(result.payload).name).toBe('Brad Pitt')
-    console.log(result.payload)
 
     const res = await deleteActor()
     expect(res.statusCode).toBe(204)

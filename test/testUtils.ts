@@ -12,6 +12,15 @@ export async function createActor(name?: string) {
   )
 }
 
+export async function getActor(id?: number) {
+  return server.inject(
+    {
+      method: 'GET',
+      url: `/actors/${id}`
+    }
+  )
+}
+
 export async function getActors() {
   return server.inject(
     {

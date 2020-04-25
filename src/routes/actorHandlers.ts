@@ -28,8 +28,12 @@ export const getActor = async (
   response: FastifyReply<ServerResponse>
 ) => {
   const actorId = request.params.id
-  const actor = actors.find((a: Actor) => a.id == actorId)
-  response.status(200).send(actor)
+  const actor: Actor | undefined = actors.find((a: Actor) => a.id == actorId)
+  if (!actor) {
+    response.status(404).send('Actor not found')
+  } else {
+    response.status(200).send(actor)
+  }
 }
 
 export const getActors = async (request: FastifyRequest, response: FastifyReply<ServerResponse>) => {
