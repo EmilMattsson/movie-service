@@ -38,3 +38,36 @@ export async function deleteActor(id?: number) {
     }
   )
 }
+
+export async function getMovie(id?:number) {
+  return server.inject(
+    {
+      method: 'GET',
+      url: `/movies/${id}`
+    }
+  )
+}
+
+export async function createMovie(title?: string, year?: number, actorIds?: string[]) {
+  const newMovie = {
+    title: title,
+    year: year,
+    actors: actorIds
+  }
+  return server.inject(
+    {
+      method: 'POST',
+      url: '/movies',
+      payload: newMovie
+    }
+  )
+}
+
+export async function deleteMovie(id?: number) {
+  return server.inject(
+    {
+      method: 'DELETE',
+      url: `/movies/${id}`
+    }
+  )
+}

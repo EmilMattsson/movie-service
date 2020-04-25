@@ -19,7 +19,7 @@ describe('testing actor routes', () => {
   test('get all actors when none have been created, then an empty array is returned', async () => {
     const res = await getActors()
     expect(res.statusCode).toBe(200)
-    expect(res.payload).toBe(JSON.stringify([]))
+    expect(res.payload).toBe('[]')
   })
   
   test('create an Actor named "Brad Pitt", then delete him', async () => {
@@ -33,7 +33,7 @@ describe('testing actor routes', () => {
     expect(res.statusCode).toBe(204)
 
     const actors = await getActors()
-    expect(actors.payload).toBe(JSON.stringify([]))
+    expect(actors.payload).toBe('[]')
   })
 
   test('try to create and actor without specifying a name should return a 400 response', async () => {
