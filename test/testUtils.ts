@@ -30,11 +30,11 @@ export async function getActors() {
   )
 }
 
-export async function deleteActor() {
+export async function deleteActor(id?: number) {
   return server.inject(
     {
       method: 'DELETE',
-      url: '/actors/0'
+      url: `/actors/${id}`
     }
   )
 }

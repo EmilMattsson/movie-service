@@ -9,6 +9,12 @@ describe('testing actor routes', () => {
     expect(res.statusCode).toBe(404)
     expect(res.payload).toBe('Actor not found')
   })
+
+  test('delete an actor that does not exist, then 404 error should be returned', async () => {
+    const res = await deleteActor(0)
+    expect(res.statusCode).toBe(404)
+    expect(res.payload).toBe('Actor not found')
+  })
   
   test('get all actors when none have been created, then an empty array is returned', async () => {
     const res = await getActors()
@@ -23,7 +29,7 @@ describe('testing actor routes', () => {
     expect(isObject(JSON.parse(result.payload))).toBe(true)
     expect(JSON.parse(result.payload).name).toBe('Brad Pitt')
 
-    const res = await deleteActor()
+    const res = await deleteActor(JSON.parse(result.payload).id)
     expect(res.statusCode).toBe(204)
 
     const actors = await getActors()

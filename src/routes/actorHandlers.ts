@@ -45,7 +45,11 @@ export const deleteActor = async (
   response: FastifyReply<ServerResponse>
 ) => {
   const actorId = request.params.id
-  actors = actors.filter((actor: Actor) => actor.id != actorId)
-  
-  response.status(204).send(actors)
+  const actor: Actor | undefined = actors.find((a: Actor) => a.id == actorId)
+  if (!actor) {
+    response.status(404).send('Actor not found')
+  } else {
+    actors = actors.filter((actor: Actor) => actor.id != actorId)
+    response.status(204).send(actors)
+  }
 }
