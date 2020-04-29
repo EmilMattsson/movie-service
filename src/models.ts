@@ -4,8 +4,8 @@ export interface Actor {
 }
 
 export interface Movie {
-	id: number
+	id: string
 	title: string
 	year: number
-	actors?: Actor[]
+	actorIds?: string[]
 }

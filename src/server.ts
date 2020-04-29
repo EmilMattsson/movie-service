@@ -1,6 +1,7 @@
 import server from './serverConfig'
+import { LISTEN_PORT, LISTEN_ADDRESS } from './env';
 
-server.listen(3000, (err) => {
+server.listen(LISTEN_PORT, LISTEN_ADDRESS, (err) => {
 	if (err) {
 		server.log.error(err)
 		process.exit(1)

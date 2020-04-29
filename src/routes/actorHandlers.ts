@@ -1,58 +1,64 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
-import { ServerResponse } from 'http'
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { ServerResponse } from 'http';
+import { v4 as uuid } from 'uuid';
 
-import { Actor } from '../models'
+import { Actor } from '../models';
+import { query } from '../db';
 
-let counter: number = 0
-let actors: Actor[] = []
+export class ActorController {
 
-export const createActor = async (
-	request: FastifyRequest,
-	response: FastifyReply<ServerResponse>
-) => {
-	if (!request.body?.name) {
-		response.status(400).send('"name" is required')
-	} else {
-		const newActor: Actor = {
-			id: counter++,
-			name: request.body.name
-		}
-		actors.push(newActor)
+  static async createActor(req: FastifyRequest, res: FastifyReply<ServerResponse>) {
+    if (!req.body?.name) {
+      res.status(400).send('name is required');
+    } else {
+      const newActor: Actor = {
+        id: uuid(),
+        name: req.body.name
+      };
+      const actorEntity = await query('INSERT INTO actor(id, name) VALUES($1, $2) RETURNING *', [
+        newActor.id,
+        newActor.name
+      ])
+        .then((result) => {
+          return result.rows[0];
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
 
-		response.status(201).send(newActor)
-	}
-}
+      res.status(201).send(actorEntity);
+    }
+  }
 
-export const getActor = async (
-	request: FastifyRequest,
-	response: FastifyReply<ServerResponse>
-) => {
-	const actorId = request.params.id
-	const actor: Actor | undefined = actors.find((a: Actor) => a.id == actorId)
-	if (!actor) {
-		response.status(404).send('Actor not found')
-	} else {
-		response.status(200).send(actor)
-	}
-}
+  static async getActor(req: FastifyRequest, res: FastifyReply<ServerResponse>) {
+    const actorId = req.params.id;
+    const actor: object | undefined = await query('SELECT * FROM actor WHERE id = $1', [actorId]).then((result) => {
+      return result.rows[0];
+    });
+    if (!actor) {
+      res.status(404).send('Actor not found');
+    } else {
+      res.status(200).send(actor);
+    }
+  }
 
-export const getActors = async (
-	request: FastifyRequest,
-	response: FastifyReply<ServerResponse>
-) => {
-	response.status(200).send(actors)
-}
+  static async getActors(req: FastifyRequest, res: FastifyReply<ServerResponse>) {
+    const actors = await query('SELECT * FROM actor').then((result) => {
+      return result.rows;
+    });
+    res.status(200).send(actors);
+  }
 
-export const deleteActor = async (
-	request: FastifyRequest,
-	response: FastifyReply<ServerResponse>
-) => {
-	const actorId = request.params.id
-	const actor: Actor | undefined = actors.find((a: Actor) => a.id == actorId)
-	if (!actor) {
-		response.status(404).send('Actor not found')
-	} else {
-		actors = actors.filter((actor: Actor) => actor.id != actorId)
-		response.status(204).send(actors)
-	}
+  static async deleteActor(request: FastifyRequest, response: FastifyReply<ServerResponse>) {
+    const actorId = request.params.id;
+    const actor: object | undefined = await query('SELECT * FROM actor WHERE id = $1', [actorId]).then((result) => {
+      return result.rows[0];
+    });
+    if (!actor) {
+      response.status(404).send('Actor not found');
+    } else {
+      query('DELETE FROM actor WHERE id = $1', [actorId]);
+      response.status(204).send();
+    }
+  }
 }

@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+
+  movie-service:
+    container_name: movie-service
+    image: movie-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # depends_on:
+    #   - "postgres"
+    ports:
+      - 4000:4000
+    environment:
+      LISTEN_ADDRESS: "0.0.0.0"
+      LISTEN_PORT: 4000
+      NODE_ENV: "production"
+      PGHOST: "docker.for.win.localhost"
+      PGUSER: "movieservice"
+      PGDATABASE: "MovieServiceDB"
+      PGPASSWORD: "try_to.guessMYPWD1337"
+      PGPORT: 5432
+
+  # postgres:
+  #   image: postgres:12.1-alpine
+  #   ports:
+  #     - 5555:5555
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: "movieservice"
+  #     POSTGRES_PASSWORD: "try_to.guessMYPWD1337"
+  #     POSTGRES_DB: "MovieServiceDB"

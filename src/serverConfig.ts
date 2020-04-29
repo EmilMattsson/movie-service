@@ -1,24 +1,19 @@
-import fastify, { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance } from 'fastify';
 
-import { createActor, getActor, deleteActor, getActors } from './routes/actorHandlers'
-import {
-	createActorOptions,
-	getActorOptions,
-	deleteActorOptions
-} from './routes/actorRouteOptions'
-import { MovieController } from './routes/movieController'
+import { ActorController } from './routes/actorHandlers';
+import { createActorOptions, getActorOptions, deleteActorOptions } from './routes/actorRouteOptions';
+import { MovieController } from './routes/movieController';
 
-const server: FastifyInstance = fastify({ logger: true })
-const movieController = new MovieController()
+const server: FastifyInstance = fastify({ logger: true });
 
-server.get('/actors', getActors)
-server.post('/actors', createActorOptions, createActor)
-server.get('/actors/:id', getActorOptions, getActor)
-server.delete('/actors/:id', deleteActorOptions, deleteActor)
+server.get('/actors', ActorController.getActors);
+server.post('/actors', createActorOptions, ActorController.createActor);
+server.get('/actors/:id', getActorOptions, ActorController.getActor);
+server.delete('/actors/:id', deleteActorOptions, ActorController.deleteActor);
 
-server.get('/movies', movieController.getMovies)
-server.post('/movies', movieController.createMovie)
-server.get('/movies/:id', movieController.getMovie)
-server.delete('/movies/:id', movieController.deleteMovie)
+server.get('/movies', MovieController.getMovies);
+server.post('/movies', MovieController.createMovie);
+server.get('/movies/:id', MovieController.getMovie);
+// server.delete('/movies/:id', movieController.deleteMovie);
 
-export default server
+export default server;
